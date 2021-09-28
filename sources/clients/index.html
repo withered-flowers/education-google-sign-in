@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="google-signin-client_id"
+      content="517430794824-ihmjcmi5lbfod4e13c7t23lh7qlindvh.apps.googleusercontent.com"
+    />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <!-- Ini adalah sign in buttonnya dengan google -->
+    <div class="g-signin2" data-onsuccess="onSignIn"></div>
+
+    <!-- Required Google Platform Library -->
+    <!-- Ini digunakan untuk mengakses dan membuat script untuk google signin -->
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+    <!-- Jquery -->
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- Ini adalah custom scriptnya -->
+    <script>
+      function onSignIn(googleUser) {
+        const profile = googleUser.getBasicProfile();
+        console.log("ID: " + profile.getId()); // Do not send to your backend! Use an ID token instead.
+        console.log("Name: " + profile.getName());
+        console.log("Image URL: " + profile.getImageUrl());
+        console.log("Email: " + profile.getEmail()); // This is null if the 'email' scope is not present.
+
+        // Gunakan ini untuk mendapatkan ID Token
+        console.log("Token: " + googleUser.getAuthResponse().id_token);
+
+        $.ajax({
+          url: "http://localhost:3000/login-google",
+          method: "POST",
+          data: {
+            name: profile.getName(),
+            email: profile.getEmail(),
+          },
+        });
+      }
+    </script>
+  </body>
+</html>

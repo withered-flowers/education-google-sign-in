@@ -1,7 +1,6 @@
 ## Table of Content
 1. Introduction - OAuth
-    - 
-
+    - Testing
 1. [Let's Demo](#lets-demo)
 
 ### Prerequisites

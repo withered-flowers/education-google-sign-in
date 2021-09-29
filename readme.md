@@ -4,8 +4,9 @@
 1. [Let's Demo](#lets-demo)
 
 ### Prerequisites
-- Sudah mengingstall nodejs
+- Sudah mengingstall nodejs dan postgresql
 - Memahami framework Express pada nodejs
+- Memahami penggunaan sequelize pada nodejs
 - Memiliki akun GMail
 
 ### Let's Demo
@@ -154,7 +155,33 @@ login yang disediakan oleh Google.
     </body>
    ```
 
+Sampai pada tahap ini artinya Client side sudah setengah selesai.
+
+Selanjutnya kita akan membuat Servernya terlebih dahulu, sebelum melanjutkan  
+bagian Client lagi.
+
+Disclaimer:  
+Pada Server ini nantinya akan digunakan untuk melakukan registrasi akun  
+berdasarkan profil yang diberikan oleh Google Sign-In kepada Server yang kita  
+miliki.
+
 #### Langkah 3 - Server
+Pada langkah ini kita akan membuat server untuk melakukan registrasi akun  
+(register) ATAU Login berdasarkan profil yang diberikan.
+
+Sehingga apabila akun email sudah ada, maka akan secara otomatis Login ke  
+dalam server kita, apabila akun email belum ada, maka akan dibuatkan terlebih  
+dahulu ke dalam server (registrasi otomatis) kemudian akan login.
+
+Langkah-langkahnya adalah sebagai berikut:
+1. Buatlah sebuah folder untuk menampung file server
+1. Pada folder ini, inisialisasi project dengan menggunakan `npm init -y`
+1. Install package yang dibutuhkan pada project ini dengan menggunakan  
+   `npm i express pg sequelize jsonwebtoken cors`
+1. Install package yang dibutuhkan untuk development pada project ini dengan  
+   menggunakan `npm i -D sequelize-cli nodemon`
+1. Inisialisasi database dengan menggunakan `npx sequelize-cli init`
+1. 
 
 #### Langkah 4 - Perbaikan Client dan Server
 

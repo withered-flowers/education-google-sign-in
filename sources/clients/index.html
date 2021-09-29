@@ -38,14 +38,33 @@
         // Gunakan ini untuk mendapatkan ID Token
         console.log("Token: " + googleUser.getAuthResponse().id_token);
 
+        // Menggunakan ajax call ke server dan mengirimkan data yang dibutuhkan
+        // ingat pada backend kita tidak boleh mengirimkan data name dan email
+        // secara langsung ke server
+        // tapi harus menggunakan id_token yang disediakan oleh google
         $.ajax({
           url: "http://localhost:3000/login-google",
           method: "POST",
           data: {
-            name: profile.getName(),
-            email: profile.getEmail(),
+            // JANGAN GUNAKAN KEDUA INI YAH !
+            // name: profile.getName(),
+            // email: profile.getEmail(),
+
+            // GUNAKAN YANG INI
+            token: googleUser.getAuthResponse().id_token,
           },
-        });
+        })
+          .done(function (resp) {
+            // di sini diketahui bahwa resp adalah berbentuk object dengan
+            // sebuah prop dengan nama accesss_token
+            console.log(resp);
+
+            // simpan data ini ke dalam localStorage
+            localStorage.setItem("access_token", resp.access_token);
+          })
+          .fail(function (err) {
+            console.log(err);
+          });
       }
     </script>
   </body>

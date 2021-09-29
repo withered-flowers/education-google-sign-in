@@ -28,15 +28,43 @@ tersebut dan mencoba untuk mengimplementasikannya ke dalam aplikasi sederhana
 yang dibuat yah !
 
 #### OAuth2
+OAuth2 atau Open Authorization v2.0, adalah suatu protokol yang memungkinkan 
+pengguna untuk berbagi sumber / data pribadi tanpa perlu memberikan nama atau  
+password yang dimiliki.
 
+Untuk mengetahui lebih lanjut tentang OAuth2 ini, mari kita tonton sebuah  
+video pendek berikut yang akan membantu kita lebih memahami OAuth2 ini
+
+https://www.youtube.com/watch?v=byZQ9KT7wWA
+
+Dari video pendek di atas, dapat disimpulkan bahwa pada *Olaf2.0* ini,  
+Checknotes 30 USD itu apabila direalisasikan, sebenarnya adalah sebuah kunci   
+a.k.a `token` yang berfungsi untuk melakukan proses Authentikasi dan  
+Authorisasinya.
+
+`token` ini kita bisa berikan secara spesifik untuk batasan bisa melakukan   
+apa saja atau disebut dengan `scope`, durasinya berapa lama sebelum expired,  
+dkk.
+
+Dalam OAuth2 ini sendiri sebenarnya ada banyak sekali terminologi yang ada,   
+namun yang paling penting adalah pada bagian, Provider atau penyedia resource  
+dan Consumer atau yang mengkonsumsi resource yang tersedia.
+
+Sebagai contoh 9gag dengan login Facebook, maka Providernya adalah Facebook   
+dan Consumernya adalah 9gag itu sendiri.
+
+Nah pada pembelajaran ini, kita tidak akan berusaha untuk membuat sisi   
+Providernya OAuth2 ini, namun kita akan membuat sisi Consumer dari OAuth2 ini,  
+atau istilah kerennya adalah kita akan membuat Social Media Login.
 
 #### Social Media Login
-
-### Let's Demo
 Pada demo pembelajaran Social Media Login ini, kita akan menggunakan provider   
 OAuth2 nya adalah `Google`, dengan `Google Sign-in (Legacy)` nya dan  
 consumernya adalah aplikasi Express yang kita buat nanti.
 
+Tanpa ba bi bu lama lama lagi, mari kita demokan ini !
+
+### Let's Demo
 Disclaimer:
 OAuth2 ini hanya akan kita gunakan sebagai media untuk registrasi ke dalam  
 aplikasi Express kita saja, tidak sampai membaca data dengan scope tambahan  
@@ -449,6 +477,9 @@ berhasil menggunakannya sebagai media untuk login ke dalam aplikasi yang kita
 buat !
 
 ### References
+- https://id.wikipedia.org/wiki/OAuth
+- https://medium.com/codelabs-unikom/memahami-oauth-2-0-api-security-9376bc3a307b
+- https://www.youtube.com/watch?v=byZQ9KT7wWA
 - https://developers.google.com/identity/sign-in/web/sign-in
 - https://developers.google.com/identity/sign-in/web/backend-auth
 - https://sequelize.org/master/manual/model-querying-finders.html#-code-findorcreate--code-

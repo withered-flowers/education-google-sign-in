@@ -472,6 +472,19 @@ Mari kita memodifikasi lagi kode yang ada pada client kita
    `Inspect Element`, kemudian Pilih pada tab `Storage`, situs yang digunakan  
    e.g. `http://localhost:8080` kemudian lihatlah apakah ada key `access_token`
 
+TL;DR (Step by Step)
+0. Registrasi OAuth di provider
+1. Client akan melakukan login ke google
+2. Client akan mendapatkan "token"
+3. Client akan mengirimkan "token" tersebut ke server (backend) -> via ajax
+4. Dari server akan berusaha untuk mentranslate token tersebut jadi payload
+5. Dalam payload tersebut nanti kita akan liat ada isinya apa aja untuk kita proses ke dalam databasenya kita!
+6. Kemudian kita akan berusaha untuk mencari ATAU menambahkan data tersebut (apabila belum ada !) -> Apabila ada data tambahan lain yang dibutuhkan, berarti harus menuliskan `defaults`-nya !
+7. Sampai di tahap ini, "registrasi" sudah selesai, selanjutnya kita akan bikin untuk bagian "login"-nya juga di dalam aplikasinya kita
+8. Membuat PAYLOAD yang dibutuhkan di aplikasinya kita
+9. Membuat TOKEN yang akan digunakan di aplikasinya kita
+10. Mengirimkan kembali si TOKEN aplikasinya kita ke clientnya kita !
+
 Selamat sampai di sini kita sudah berhasil menggunakan Google Sign-In dan  
 berhasil menggunakannya sebagai media untuk login ke dalam aplikasi yang kita  
 buat !

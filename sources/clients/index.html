@@ -24,6 +24,9 @@
 
     <!-- Ini adalah custom scriptnya -->
     <script>
+      // Ini adalah function yang dipakai di bawah
+      // Pada saat memanggil google sign in "INITIALIZE"
+      // dan ada fungsi "Callback"-nya
       function handleCredentialResponse(response) {
         // Ini JWT dari si Google, JANGAN DIGUNAKAN AS-IT-IS di backendn-ya kita !
         console.log("Encoded JWT ID token: " + response.credential);
@@ -54,7 +57,7 @@
           });
       }
 
-      window.onload = function () {
+      $(document).ready(function () {
         google.accounts.id.initialize({
           client_id:
             "517430794824-0vo2m9ntml49t2ptr0r56t7103ob19uv.apps.googleusercontent.com",
@@ -65,7 +68,7 @@
           { theme: "outline", size: "large" } // customization attributes
         );
         google.accounts.id.prompt(); // also display the One Tap dialog
-      };
+      });
     </script>
   </body>
 </html>

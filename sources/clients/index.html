@@ -4,20 +4,16 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="google-signin-client_id"
-      content="517430794824-ihmjcmi5lbfod4e13c7t23lh7qlindvh.apps.googleusercontent.com"
-    />
     <title>Document</title>
   </head>
 
   <body>
     <!-- Ini adalah sign in buttonnya dengan google -->
-    <div class="g-signin2" data-onsuccess="onSignIn"></div>
+    <div id="buttonDiv"></div>
 
     <!-- Required Google Platform Library -->
     <!-- Ini digunakan untuk mengakses dan membuat script untuk google signin -->
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 
     <!-- Jquery -->
     <script
@@ -28,15 +24,9 @@
 
     <!-- Ini adalah custom scriptnya -->
     <script>
-      function onSignIn(googleUser) {
-        const profile = googleUser.getBasicProfile();
-        console.log("ID: " + profile.getId()); // Do not send to your backend! Use an ID token instead.
-        console.log("Name: " + profile.getName());
-        console.log("Image URL: " + profile.getImageUrl());
-        console.log("Email: " + profile.getEmail()); // This is null if the 'email' scope is not present.
-
-        // Gunakan ini untuk mendapatkan ID Token
-        console.log("Token: " + googleUser.getAuthResponse().id_token);
+      function handleCredentialResponse(response) {
+        // Ini JWT dari si Google, JANGAN DIGUNAKAN AS-IT-IS di backendn-ya kita !
+        console.log("Encoded JWT ID token: " + response.credential);
 
         // Menggunakan ajax call ke server dan mengirimkan data yang dibutuhkan
         // ingat pada backend kita tidak boleh mengirimkan data name dan email
@@ -46,12 +36,9 @@
           url: "http://localhost:3000/login-google",
           method: "POST",
           data: {
-            // JANGAN GUNAKAN KEDUA INI YAH !
-            // name: profile.getName(),
-            // email: profile.getEmail(),
-
-            // GUNAKAN YANG INI
-            token: googleUser.getAuthResponse().id_token,
+            // Kita mengirimkan token yang didapat dari si Google, ke Servernya kita
+            // Untuk nanti didecode di sisi server
+            token: response.credential,
           },
         })
           .done(function (resp) {
@@ -66,6 +53,19 @@
             console.log(err);
           });
       }
+
+      window.onload = function () {
+        google.accounts.id.initialize({
+          client_id:
+            "517430794824-0vo2m9ntml49t2ptr0r56t7103ob19uv.apps.googleusercontent.com",
+          callback: handleCredentialResponse,
+        });
+        google.accounts.id.renderButton(
+          document.getElementById("buttonDiv"),
+          { theme: "outline", size: "large" } // customization attributes
+        );
+        google.accounts.id.prompt(); // also display the One Tap dialog
+      };
     </script>
   </body>
 </html>

@@ -1,23 +1,27 @@
 ## Table of Content
+
 1. [Introduction](#introduction)
-    - OAuth2
-    - Social Media Login
+   - OAuth2
+   - Social Media Login
 1. [Let's Demo](#lets-demo)
 
 ### Prerequisites
+
 - Sudah mengingstall nodejs dan postgresql
 - Memahami framework Express pada nodejs
 - Memahami penggunaan sequelize pada nodejs
 - Memiliki akun GMail
 
 ### Introduction
+
 Apabila kita sedang menggunakan aplikasi, seringkali kita menemukan bahwa  
 pengguna aplikasi tidak selalu harus melakukan registrasi ke dalam aplikasi  
 yang dibuat terlebih dahulu sebelum bisa melakukan login ke dalam aplikasi  
 yang ada bukan?
 
 Sebagai contoh:
-- Untuk bisa menggunakan aplikasi `9gag`, kita bisa saja login dengan 
+
+- Untuk bisa menggunakan aplikasi `9gag`, kita bisa saja login dengan
   menggunakan akun `Facebook` yang dimiliki oleh pengguna, atau akun `Gmail`  
   yang dimiliki oleh pengguna
 
@@ -28,7 +32,8 @@ tersebut dan mencoba untuk mengimplementasikannya ke dalam aplikasi sederhana
 yang dibuat yah !
 
 #### OAuth2
-OAuth2 atau Open Authorization v2.0, adalah suatu protokol yang memungkinkan 
+
+OAuth2 atau Open Authorization v2.0, adalah suatu protokol yang memungkinkan
 pengguna untuk berbagi sumber / data pribadi tanpa perlu memberikan nama atau  
 password yang dimiliki.
 
@@ -37,34 +42,36 @@ video pendek berikut yang akan membantu kita lebih memahami OAuth2 ini
 
 https://www.youtube.com/watch?v=byZQ9KT7wWA
 
-Dari video pendek di atas, dapat disimpulkan bahwa pada *Olaf2.0* ini,  
-Checknotes 30 USD itu apabila direalisasikan, sebenarnya adalah sebuah kunci   
+Dari video pendek di atas, dapat disimpulkan bahwa pada _Olaf2.0_ ini,  
+Checknotes 30 USD itu apabila direalisasikan, sebenarnya adalah sebuah kunci  
 a.k.a `token` yang berfungsi untuk melakukan proses Authentikasi dan  
 Authorisasinya.
 
-`token` ini kita bisa berikan secara spesifik untuk batasan bisa melakukan   
+`token` ini kita bisa berikan secara spesifik untuk batasan bisa melakukan  
 apa saja atau disebut dengan `scope`, durasinya berapa lama sebelum expired,  
 dkk.
 
-Dalam OAuth2 ini sendiri sebenarnya ada banyak sekali terminologi yang ada,   
+Dalam OAuth2 ini sendiri sebenarnya ada banyak sekali terminologi yang ada,  
 namun yang paling penting adalah pada bagian, Provider atau penyedia resource  
 dan Consumer atau yang mengkonsumsi resource yang tersedia.
 
-Sebagai contoh 9gag dengan login Facebook, maka Providernya adalah Facebook   
+Sebagai contoh 9gag dengan login Facebook, maka Providernya adalah Facebook  
 dan Consumernya adalah 9gag itu sendiri.
 
-Nah pada pembelajaran ini, kita tidak akan berusaha untuk membuat sisi   
+Nah pada pembelajaran ini, kita tidak akan berusaha untuk membuat sisi  
 Providernya OAuth2 ini, namun kita akan membuat sisi Consumer dari OAuth2 ini,  
 atau istilah kerennya adalah kita akan membuat Social Media Login.
 
 #### Social Media Login
-Pada demo pembelajaran Social Media Login ini, kita akan menggunakan provider   
+
+Pada demo pembelajaran Social Media Login ini, kita akan menggunakan provider  
 OAuth2 nya adalah `Google`, dengan `Google Sign-in (Legacy)` nya dan  
 consumernya adalah aplikasi Express yang kita buat nanti.
 
 Tanpa ba bi bu lama lama lagi, mari kita demokan ini !
 
 ### Let's Demo
+
 Disclaimer:
 OAuth2 ini hanya akan kita gunakan sebagai media untuk registrasi ke dalam  
 aplikasi Express kita saja, tidak sampai membaca data dengan scope tambahan  
@@ -76,6 +83,7 @@ clientnya pada sebuah file html saja.
 Langkah-langkah yang harus dilakukan adalah:
 
 #### Langkah 1 - Register Apps di Provider
+
 Pada langkah ini kita akan mencoba untuk meregistrasikan aplikasi yang kita  
 buat agar dapat menggunakan OAuth yang disediakan oleh Google, agar kita dapat  
 menggunakan Google Login dalam aplikasi kita
@@ -83,126 +91,109 @@ menggunakan Google Login dalam aplikasi kita
 1. Membuka console GCP pada tautan https://console.cloud.google.com
 1. Lakukan login dengan akun GMail yang dimiliki, apabila diminta buatlah  
    sebuah project baru pada console GCP dengan nama yang disukai
-1. Membuka halaman Credentials pada console GCP pada tautan 
+1. Membuka halaman Credentials pada console GCP pada tautan
    https://console.developers.google.com/apis/credentials
 1. Pilih tombol `+ CREATE CREDENTIALS` untuk membuat sebuah credentials baru  
    berupa `OAuth Client ID`
 1. Pada halaman `Create OAuth Client ID`, masukkan informasi sebagai berikut:
    - Application Type: `Web Application`
    - Name: `<TERSERAH_DEVELOPER>`
-   - Authorized JavaSript Origins -> `+ ADD URI` -> Masukkan URL halaman   
-     client akan digunakan 
-      - Untuk development, gunakan `http://localhost:<port>`
-      - Untuk production, gunakan domain yang digunakan untuk serving client
+   - Authorized JavaSript Origins -> `+ ADD URI` -> Masukkan URL halaman  
+     client akan digunakan
+     - Untuk development, gunakan `http://localhost:<port>`
+     - Untuk production, gunakan domain yang digunakan untuk serving client
    - Authorized redirect URIs -> kosongkan untuk sekarang ini, pada  
      pembelajaran ini kita tidak menggunakannya
-1. Selanjutnya tekan tombol `CREATE` dan akan diberikan *OAuth2 Client ID*   
-   dan *OAuth2 Client Secret*, Catat Client IDnya.
+1. Selanjutnya tekan tombol `CREATE` dan akan diberikan _OAuth2 Client ID_  
+   dan _OAuth2 Client Secret_, Catat Client IDnya.
 
 Sampai pada tahap ini, proses untuk registrasi aplikasi kita pada provider  
 Google sudah selesai, selanjutnya kita akan mencoba untuk membuat halaman  
 client consumernya dengan menggunakan html biasa dan jQuery sederhana.
 
 #### Langkah 2 - Client
+
 Pada langkah ini kita akan membuat halaman clientnya agar dapat menggunakan  
 login yang disediakan oleh Google.
 
 1. Buatlah sebuah folder untuk menampung code client
 1. Pada folder ini, inisialisasi project dengan menggunakan `npm init -y`
 1. Dikarenakan kita diharuskan untuk menyediakan client ini dalam localhost,  
-   Maka selanjutnya kita akan menginstall `live-server`, sebuah package untuk   
+   Maka selanjutnya kita akan menginstall `vite`, sebuah package untuk  
    menyediakan index.html ini di dalam localhost, jadi file index.html ini  
    tidak hanya asal di drag drop ke dalam browser saja.
 
-   Dapat digunakan dengan menggunakan perintah `npm i -D live-server`
+   Dapat digunakan dengan menggunakan perintah `npm i -D vite`
+
 1. Selanjutnya kita akan membuat sebuah file index.html sederhana yang isinya  
    adalah sebagai berikut:
+
    ```html
    <!DOCTYPE html>
    <html lang="en">
-   <head>
-      <meta charset="UTF-8" />
-      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>Google Sign In</title>
-   </head>
-   <body></body>
+     <head>
+       <meta charset="UTF-8" />
+       <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+       <title>Document</title>
+     </head>
+
+     <body>
+       <!-- Ini adalah sign in buttonnya dengan google -->
+       <div id="buttonDiv"></div>
+
+       <!-- Required Google Platform Library -->
+       <!-- Ini digunakan untuk mengakses dan membuat script untuk google signin -->
+       <script
+         src="https://accounts.google.com/gsi/client"
+         async
+         defer
+       ></script>
+
+       <!-- Jquery -->
+       <script
+         src="https://code.jquery.com/jquery-3.6.0.min.js"
+         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+         crossorigin="anonymous"
+       ></script>
+
+       <!-- Ini adalah custom scriptnya -->
+       <script>
+         // Ini adalah function yang dipakai di bawah
+         // Pada saat memanggil google sign in "INITIALIZE"
+         // dan ada fungsi "Callback"-nya
+         function handleCredentialResponse(response) {}
+
+         $(document).ready(function () {
+           google.accounts.id.initialize({
+             client_id: "GOOGLE_CLIENT_ID_HERE",
+             callback: handleCredentialResponse,
+           });
+           google.accounts.id.renderButton(
+             document.getElementById("buttonDiv"),
+             { theme: "outline", size: "large" } // customization attributes
+           );
+           google.accounts.id.prompt(); // also display the One Tap dialog
+         });
+       </script>
+     </body>
    </html>
    ```
-1. Pada tag `<head>`, tambahkan sebaris code berikut
+
+1. Selanjutnya kita akan mencoba untuk mengimplementasikan fungsi yang
+   dibutuhkan pada saat `callback` ke-_trigger_, yaitu `handleCredentialResponse`
+
    ```html
-   <head>
-      ...
-      <!-- Tambahkan sebaris ini sebelum title -->
-      <!-- ganti YOUR_CLIENT_ID.apps.googleusercontent.com -->
-      <!-- dengan Client ID yang diberikan pada saat registrasi aplikasi -->
-      <!-- Digunakan oleh Google Sign In untuk mengetahui Client ID kita -->
-      <meta 
-         name="google-signin-client_id" 
-         content="YOUR_CLIENT_ID.apps.googleusercontent.com">
-      <title>Google Sign In</title>
-   </head>
-   ```
-1. Pada akhir dari tag `<body>`, tambahkan sebuah `script` untuk menggunakan  
-   `Google Platform Library`. Library ini berfungsi untuk menyediakan tombol  
-   `Google Sign-In`.
-   ```html
-   <body>
-      <!-- Tambahkan script ini -->
-      <script src="https://apis.google.com/js/platform.js" async defer></script>
-   </body>
-   ```
-1. Selanjutnya kita akan menmbuat sebuah tombol `Google Sign-In` pada  
-   aplikasi yang dibuat.
-   ```html
-   <body>
-      <!-- Tambahkan div ini -->
-      
-      <!-- Perhatikan pada div ini ada sebuah attribute dengan nama -->
-      <!-- data-onsuccess -->
-
-      <!-- data-onsucess ini berisi sebuah fungsi yang harus 
-            diimplementasikan -->
-      <div class="g-signin2" data-onsuccess="onSignIn"></div>
-
-      <script src="https://apis.google.com/js/platform.js" async defer></script>
-   </body>
-   ```
-1. Selanjutnya kita akan mencoba untuk mengimplementasikan fungsi yang 
-   dibutuhkan pada saat `data-onsucess` ke-*trigger*, yaitu `onSignIn`
-   ```html
-   <body>
-      <div class="g-signin2" data-onsuccess="onSignIn"></div>
-
-      <script src="https://apis.google.com/js/platform.js" async defer></script>
-
-      <!-- Custom script untuk implementasi fungsi onSignIn -->
-      <script>
-         // Fungsi ini menerima sebuah parameter
-         // dengan nama googleUser
-         function onSignIn(googleUser) {
-            // di sini kita akan mengambil basic profile yang disediakan
-            // ketika user berhasil login dengan Google Sign-In
-            const profile = googleUser.getBasicProfile();
-
-            // Cetak data yang bisa diambil dari basic profile tersebut
-
-            // data ID ini tidak boleh di send ke backend server kita
-            // harus menggunakan cara lain untuk passing data ke backend
-            // server nantinya (hint: gunakan token !)
-            console.log('ID: ' + profile.getId()); 
-            
-            console.log('Name: ' + profile.getName());
-            console.log('Image URL: ' + profile.getImageUrl());
-
-            // Email ini akan kosong (null) apabila 
-            // scope `email` tidak didefinisikan
-            console.log('Email: ' + profile.getEmail());
-
-            // Gunakan ini untuk mendapatkan ID Token
-            console.log("Token: " + googleUser.getAuthResponse().id_token);
-         }
-      </script>
+     <!-- Custom script untuk implementasi fungsi onSignIn -->
+     <script>
+      // Ini adalah function yang dipakai di bawah
+      // Pada saat memanggil google sign in "INITIALIZE"
+      // dan ada fungsi "Callback"-nya
+      function handleCredentialResponse(response) {
+        // Ini JWT dari si Google, JANGAN DIGUNAKAN AS-IT-IS di backendn-ya kita !
+        console.log("Encoded JWT ID token: " + response.credential);
+      }
+     </script>
    </body>
    ```
 
@@ -217,6 +208,7 @@ berdasarkan profil yang diberikan oleh Google Sign-In kepada Server yang kita
 miliki.
 
 #### Langkah 3 - Server
+
 Pada langkah ini kita akan membuat server untuk melakukan registrasi akun  
 (register) ATAU Login berdasarkan profil yang diberikan.
 
@@ -227,6 +219,7 @@ dahulu ke dalam server (registrasi otomatis) kemudian akan login.
 Langkah-langkahnya adalah sebagai berikut:
 
 [Inisialisasi Server]
+
 1. Buatlah sebuah folder untuk menampung file server
 1. Pada folder ini, inisialisasi project dengan menggunakan `npm init -y`
 1. Install package yang dibutuhkan pada project ini dengan menggunakan  
@@ -234,7 +227,7 @@ Langkah-langkahnya adalah sebagai berikut:
 1. Install package yang dibutuhkan untuk development pada project ini dengan  
    menggunakan `npm i -D sequelize-cli nodemon`
 1. Inisialisasi database dengan menggunakan `npx sequelize-cli init`
-1. Bukalah file `config/config.json` dan konfigurasi database agar sesuai   
+1. Bukalah file `config/config.json` dan konfigurasi database agar sesuai  
    credential database server yang digunakan
 1. Buatlah db berdasarkan config tersebut dengan `npx sequelize-cli db:create`
 1. Buatlah sebuah model dengan nama User yang berisi username dan password  
@@ -242,9 +235,10 @@ Langkah-langkahnya adalah sebagai berikut:
    `npx sequelize-cli model:create --name User --attributes name:string,password:string`
 1. Buatlah table berdasar model tersebut dengan `npx sequelize-cli db:migrate`
 1. Buatlah sebuah file dengan nama `app.js`
-1. Selanjutnya kita akan membuat kode dasar untuk express pada file `app.js`   
+1. Selanjutnya kita akan membuat kode dasar untuk express pada file `app.js`  
    ini. Kode dasar ini berisi sebuah endpoint `POST /login-google` yang akan  
    digunakan pada pembelajaran ini.
+
    ```javascript
    const cors = require("cors");
    const express = require("express");
@@ -259,19 +253,21 @@ Langkah-langkahnya adalah sebagai berikut:
 
    // POST /login-google
    app.post("/login-google", async (req, res) => {
-      // Masih kosong
-      // Nanti akan kita isi dengan logic yang dibutuhkan
+     // Masih kosong
+     // Nanti akan kita isi dengan logic yang dibutuhkan
    });
 
    app.listen(port, (_) => console.log(`Application is working at ${port}`));
    ```
 
 [Menambahkan Library Google]
+
 1. Untuk bisa menggunakan Google Sign In, sekarang kita akan membutuhkan  
    sebuah library tambahan dari google sendiri yaitu `google-auth-library`.  
    Cara installnya dengan menggunakan `npm i google-auth-library`
 1. Modifikasi kode pada file `app.js` agar melakukan import dan inisialisasi  
    OAuth2Client.
+
    ```javascript
    // Tambahkan kode untuk import OAuth2Client dari Google Auth Library
    const { OAuth2Client } = require("google-auth-library");
@@ -280,34 +276,36 @@ Langkah-langkahnya adalah sebagai berikut:
 
    // Instance client yang akan digunakan
    const client = new OAuth2Client("MASUKKAN_CLIENT_ID_DI_SINI");
-   
+
    ...
    ```
+
 1. Modifikasi kode pada bagian `POST /login-google` sehingga kita bisa  
    menerima data dengan nama `token` dan akan digunakan untuk membaca data  
    `payload`nya
+
    ```javascript
    // POST /login-google
    app.post("/login-google", async (req, res) => {
-      // di sini kita akan meminta sebuah data dikirimkan bernama token
-      const { token } = req.body;
+     // di sini kita akan meminta sebuah data dikirimkan bernama token
+     const { token } = req.body;
 
-      // ticket ini adalah data terenkripsi yang nanti  
-      // bisa kita ambil payloadnya
-      const ticket = await client.verifyIdToken({
-         idToken: token,
-         audience: "MASUKKAN_CLIENT_ID_DI_SINI",
-      });
+     // ticket ini adalah data terenkripsi yang nanti
+     // bisa kita ambil payloadnya
+     const ticket = await client.verifyIdToken({
+       idToken: token,
+       audience: "MASUKKAN_CLIENT_ID_DI_SINI",
+     });
 
-      // ekstrak data payload berdasarkan ticket yang didapat
-      const payload = ticket.getPayload();
+     // ekstrak data payload berdasarkan ticket yang didapat
+     const payload = ticket.getPayload();
 
-      // Mari kita lihat apakah isi dari payload ini?
-      console.log(payload);
+     // Mari kita lihat apakah isi dari payload ini?
+     console.log(payload);
 
-      // untuk sementara saja
-      // nanti akan kita modifikasi lagi
-      res.status(200).json({ msg: "See console" });
+     // untuk sementara saja
+     // nanti akan kita modifikasi lagi
+     res.status(200).json({ msg: "See console" });
    });
    ```
 
@@ -315,65 +313,48 @@ Sampai pada tahap ini artinya kita sudah berhasil untuk bisa mendapatkan data
 dari client dan ditranslate data yang dibutuhkan oleh server. Namun kita  
 belum bisa mengirimkan data dari client karena apabila dilihat pada code  
 client, tidak ada kiriman data apapun ke server, sehingga sekarang kita akan  
-memperbaiki kode tersebut. 
+memperbaiki kode tersebut.
 
 #### Langkah 4 - Perbaikan Client dan Server
+
 Sekarang kita akan menggabungkan Client dan Server sehingga bisa berkomunikasi  
 dengan baik.
 
 [Client]
+
 1. Jalankan file pada client dengan membuka folder client dan menjalankan  
-   live-server dengan `npx live-server --host=localhost .`
-1. Pada file client `index.html` tambahkanlah sebuah script baru untuk jQuery.  
-   Di pembelajaran ini kita hanya menggunakan jQuery untuk melakukan ajax call  
-   saja. Bisa digantikan dengan `fetch` ataupun `axios` bila tidak ingin  
-   menggunakan jQuery, disesuaikan saja.
-   ```html
-   <!-- Jquery -->
-   <!-- Diletakkan sebelum custom script yang berisi fungsi onSignIn -->
-   <script
-      src="https://code.jquery.com/jquery-3.6.0.min.js"
-      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-      crossorigin="anonymous"
-   ></script>
-   <script>
-      function onSignIn(googleUser) {
-         ...
-      }
-   </script>
-   ```
-1. Selanjutnya kita akan memodifikasi fungsi `onSignIn` sehingga bisa  
+   vite dengan `npx vite`
+1. Selanjutnya kita akan memodifikasi fungsi `handleCredentialResponse` sehingga bisa  
    mengirimkan data `token` untuk diproses oleh server kita.
+
    ```html
    <script>
-      function onSignIn(googleUser) {
-         ...
+     function handleCredentialResponse(response) {
+       // Ini JWT dari si Google, JANGAN DIGUNAKAN AS-IT-IS di backendn-ya kita !
+       console.log("Encoded JWT ID token: " + response.credential);
 
-         // Menggunakan ajax call ke server dan mengirimkan data yang dibutuhkan
-         // ingat pada backend kita tidak boleh mengirimkan data name dan email
-         // secara langsung ke server
-         // tapi harus menggunakan id_token yang disediakan oleh google
-         $.ajax({
-            url: "http://localhost:3000/login-google",
-            method: "POST",
-            data: {
-            // JANGAN GUNAKAN KEDUA INI YAH !
-            // name: profile.getName(),
-            // email: profile.getEmail(),
-
-            // GUNAKAN YANG INI
-            // nanti akan diterima oleh server dalam bentuk
-            // req.body.token
-            token: googleUser.getAuthResponse().id_token,
-            },
+       // Menggunakan ajax call ke server dan mengirimkan data yang dibutuhkan
+       // ingat pada backend kita tidak boleh mengirimkan data name dan email
+       // secara langsung ke server
+       // tapi harus menggunakan id_token yang disediakan oleh google
+       $.ajax({
+         url: "http://localhost:3000/login-google",
+         method: "POST",
+         data: {
+           // Kita mengirimkan token yang didapat dari si Google, ke Servernya kita
+           // Untuk nanti didecode di sisi server
+           token: response.credential,
+         },
+       })
+         .done(function (resp) {
+           // di sini diketahui bahwa resp adalah berbentuk object dengan
+           // sebuah prop dengan nama accesss_token
+           console.log(resp);
          })
-            .done(function (resp) {
-               console.log(resp);
-            })
-            .fail(function (err) {
-               console.log(err);
-            });
-      }
+         .fail(function (err) {
+           console.log(err);
+         });
+     }
    </script>
    ```
 
@@ -391,6 +372,7 @@ dan berhasil login?
 Mari kita mencoba untuk mengubah dari sisi servernya lagi
 
 [Server]
+
 1. Bukalah folder server, kemudian jalankan `app.js` dengan menggunakan  
    `npx nodemon app.js`
 1. Bukalah kembali file `app.js` yang sudah dibuat
@@ -404,8 +386,9 @@ Mari kita mencoba untuk mengubah dari sisi servernya lagi
    ...
    ```
 1. Selanjutnya kita akan menggunakan method `findOrCreate` pada sequelize  
-   untuk bisa mencari ATAU menambahkan data pada database. method ini  
-   ditambahkan pada endpoint `POST /login-google`
+    untuk bisa mencari ATAU menambahkan data pada database. method ini  
+    ditambahkan pada endpoint `POST /login-google`
+
    ```javascript
    // POST /login-google
    app.post("/login-google", async (req, res) => {
@@ -434,8 +417,9 @@ Mari kita mencoba untuk mengubah dari sisi servernya lagi
       res.status(200).json({ access_token: payloadDariServer });
    });
    ```
-Sampai pada tahap ini, artinya kita sudah berhasil untuk menambahkan data pada  
-Server kita dan mengembalikan token ke client, HORE !!!!
+
+   Sampai pada tahap ini, artinya kita sudah berhasil untuk menambahkan data pada  
+   Server kita dan mengembalikan token ke client, HORE !!!!
 
 Namun ada sedikit lagi hal yang perlu diperhatikan, yaitu, bagaimanakah cara  
 kita menyimpan token yang dikirimkan oleh server pada client?
@@ -453,8 +437,10 @@ Cara penggunaanya pun cukup mudah.
 Mari kita memodifikasi lagi kode yang ada pada client kita
 
 [Client]
+
 1. Bukalah kembali file `index.html`
 1. Modifikasi kode `$.ajax().done()` dengan kode sebagai berikut:
+
    ```javascript
    $.ajax({
       ...
@@ -468,12 +454,13 @@ Mari kita memodifikasi lagi kode yang ada pada client kita
          localStorage.setItem("access_token", resp.access_token);
       })
    ```
+
 1. Untuk melihat apakah sudah tersimpan atau belum, pada browser, bukalah  
    `Inspect Element`, kemudian Pilih pada tab `Storage`, situs yang digunakan  
    e.g. `http://localhost:8080` kemudian lihatlah apakah ada key `access_token`
 
-TL;DR (Step by Step)
-0. Registrasi OAuth di provider
+TL;DR (Step by Step) 0. Registrasi OAuth di provider
+
 1. Client akan melakukan login ke google
 2. Client akan mendapatkan "token"
 3. Client akan mengirimkan "token" tersebut ke server (backend) -> via ajax
@@ -490,6 +477,7 @@ berhasil menggunakannya sebagai media untuk login ke dalam aplikasi yang kita
 buat !
 
 ### References
+
 - https://id.wikipedia.org/wiki/OAuth
 - https://medium.com/codelabs-unikom/memahami-oauth-2-0-api-security-9376bc3a307b
 - https://www.youtube.com/watch?v=byZQ9KT7wWA

@@ -6,7 +6,7 @@ const { User } = require("./models/index");
 
 // Instance client yang akan digunakan
 const client = new OAuth2Client(
-  "517430794824-ihmjcmi5lbfod4e13c7t23lh7qlindvh.apps.googleusercontent.com"
+  "517430794824-0vo2m9ntml49t2ptr0r56t7103ob19uv.apps.googleusercontent.com"
 );
 const app = express();
 const port = process.env.PORT || 3000;
@@ -25,7 +25,7 @@ app.post("/login-google", async (req, res) => {
   const ticket = await client.verifyIdToken({
     idToken: token,
     audience:
-      "517430794824-ihmjcmi5lbfod4e13c7t23lh7qlindvh.apps.googleusercontent.com",
+      "517430794824-0vo2m9ntml49t2ptr0r56t7103ob19uv.apps.googleusercontent.com",
   });
 
   // ekstrak data payload berdasarkan ticket yang didapat
